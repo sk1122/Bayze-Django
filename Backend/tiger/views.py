@@ -32,14 +32,13 @@ class Profile(APIView):
 class Demo(APIView):
 	permission_classes = (IsAuthenticated, )
 	def get(self, request):
-		print("fsa")
 		token = AccessTokens.objects.filter(user=request.user).first()
 		
-		my_app_id = '4118143361578217'
-		my_app_secret = 'cfa0eab1d7e579e74f3f87aaf89ed774'
+		# my_app_id = '4118143361578217'
+		# my_app_secret = 'cfa0eab1d7e579e74f3f87aaf89ed774'
 
-		FacebookAdsApi.init(my_app_id, my_app_secret, token.token)
-		my_account = AdAccount('act_3424')
-		campaigns = my_account.get_campaigns()
-		print(campaigns)
+		# FacebookAdsApi.init(my_app_id, my_app_secret, token.token)
+		# my_account = AdAccount('act_3424')
+		# campaigns = my_account.get_campaigns()
+		# print(campaigns)
 		return Response({"data": "data"})
