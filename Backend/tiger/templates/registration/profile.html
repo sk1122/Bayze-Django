@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} {{ name }} Profile {% endblock title %}
+
+
+{% block content %}
+	{{ user.email }}
+
+	{% for page in pages %}
+
+		{{ page.page_id }}
+		{{ page.page }}
+		{{ page.category }}
+
+	{% endfor %}
+{% endblock content %}
+
