@@ -1,5 +1,6 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import update_last_login
+from django.shortcuts import redirect
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
@@ -61,3 +62,15 @@ class LoginView(APIView):
 		}
 
 		return Response({"data": data}, status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+	'''
+		Logout
+	'''
+
+	permission_classes = (AllowAny, )
+	def post(self, request):
+		logout(request)
+		BlackListToken.objects.create(access_token=request.data.get('access_token'), refresh_token=request.data.get('refresh_token'))
+		return redirect('login')

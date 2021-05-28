@@ -42,14 +42,6 @@ class UserTest(APITestCase):
 		resp = self.client.post(verifyTokenURL, {'token': access_token}, format='json')
 		self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-		demoTestURL = reverse('demo')
-		self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + 'abc')
-		resp = self.client.get(demoTestURL, format='json')
-		self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
-		self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + access_token)
-		resp = self.client.get(demoTestURL, format='json')
-		self.assertEqual(resp.status_code, status.HTTP_200_OK)
-
 	def test_refresh_token(self):
 		registerUrl = reverse('register')
 		data = {
@@ -73,3 +65,28 @@ class UserTest(APITestCase):
 		resp = self.client.post(refreshTokenURL, data, format='json')
 		self.assertEqual(resp.status_code, 200)
 		self.assertTrue('access' in resp.data)
+
+	def test_user_logout(self):
+		registerUrl = reverse('register')
+		data = {
+			'email': 'sk1122@gmail.com',
+			'password': 'satyam@789'
+		}
+		response = self.client.post(registerUrl, data, format='json')
+
+		loginUrl = reverse('login')
+		data = {
+			'email': 'sk1122@gmail.com',
+			'password': 'satyam@789'
+		}
+		resp = self.client.post(loginUrl, data, format='json')
+		access_token = resp.data['data']['access_token']
+		refresh_token = resp.data['data']['refresh_token']
+
+		logoutURL = reverse('logout')
+		data = {
+			'access_token': access_token,
+			'refresh_token': refresh_token
+		}
+		resp = self.client.post(logoutURL, data, format='json')
+		self.assertEqual(resp.status_code, 302)

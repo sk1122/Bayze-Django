@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+FACEBOOK_CLIENT_ID = os.environ.get("FACEBOOK_CLIENT_ID")
+FACEBOOK_SECRET = os.environ.get("FACEBOOK_SECRET")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 
     'lion', # Authentication
     'tiger', # Facebook Client
@@ -95,14 +102,14 @@ SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
         'APP': {
-            'client_id': '4118143361578217',
-            'secret': 'cfa0eab1d7e579e74f3f87aaf89ed774',
+            'client_id': FACEBOOK_CLIENT_ID,
+            'secret': FACEBOOK_SECRET,
             'key': ''
         },
 
         'METHOD': 'oauth2',
         'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-        'SCOPE': ['email', 'public_profile'],
+        'SCOPE': ['email', 'public_profile', 'business_management', 'pages_show_list', 'pages_manage_ads', 'ads_read', 'ads_management'],
         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
         'INIT_PARAMS': {'cookie': True},
         'FIELDS': [
@@ -116,6 +123,16 @@ SOCIALACCOUNT_PROVIDERS = {
         'LOCALE_FUNC': lambda request: 'en_US',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v7.0',
+    },
+
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
     }
 }
 

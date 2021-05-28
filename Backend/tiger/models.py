@@ -39,14 +39,14 @@ class AccessTokens(models.Model):
 
 # Logic to Store FB Pages after login
 
-import facebook
-
+import facebook, requests
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 @receiver(post_save, sender=AccessTokens) # Fired when token updates
 def intercept_facebook_login(sender, instance, raw, **kwargs):
 	if not raw: # If data has changed
+		print(instance)
 		store_pages(instance.token, instance.user)
 
 def store_pages(token, user):

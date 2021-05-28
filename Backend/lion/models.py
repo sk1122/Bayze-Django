@@ -65,3 +65,8 @@ class User(AbstractBaseUser):
         to set table name in database
         '''
         db_table = "login"
+
+
+class BlackListToken(models.Model):
+    access_token = models.CharField(max_length=300)
+    refresh_token = models.CharField(max_length=300)
